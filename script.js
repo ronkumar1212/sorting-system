@@ -1,4 +1,4 @@
-const API_URL = ""; // Replace with your Google Apps Script deployment URL
+const API_URL = "https://script.google.com/macros/s/AKfycbxaQCyFV_NkjjS5JCWSqcI1c-zX3eKxaQJmAswyF2SQ7UbG7EyGGyd-ooQTy0KNbfxQ_w/exec"; // Replace with your Google Apps Script deployment URL
 
 // Fetch and display items when the page loads
 async function fetchItems() {
