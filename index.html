@@ -1,29 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Workbench Sorting System</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Workbench Sorting System</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Workbench Sorting System</h1>
-        <input type="text" id="search-bar" placeholder="Search for an item...">
-        <div id="categories">
-            <!-- Dynamic categories will load here -->
-        </div>
-        <button id="add-item-btn">Add New Item</button>
-        <div id="add-item-form" class="hidden">
-            <h2>Add New Item</h2>
-            <input type="text" id="item-name" placeholder="Item Name">
-            <input type="text" id="item-category" placeholder="Category">
-            <input type="text" id="item-location" placeholder="Location">
-            <input type="text" id="item-notes" placeholder="Notes or Image URL">
-            <button id="submit-item">Submit</button>
-        </div>
-        <div id="results"></div>
+  <div class="container">
+    <h1>Workbench Sorting System</h1>
+    <input type="text" id="search-bar" placeholder="Search for an item...">
+    <div id="categories">
+      <!-- Items will load here dynamically -->
     </div>
-    <script src="script.js"></script>
+    <button id="add-item-btn">Add New Item</button>
+    <div id="add-item-form" class="hidden">
+      <h2>Add New Item</h2>
+      <input type="text" id="item-name" placeholder="Item Name" required>
+      <input type="text" id="item-category" placeholder="Category" required>
+      <input type="text" id="item-location" placeholder="Location" required>
+      <input type="text" id="item-notes" placeholder="Notes or Image URL">
+      <button id="submit-item">Submit</button>
+    </div>
+  </div>
+  <script src="script.js"></script>
 </body>
 </html>
