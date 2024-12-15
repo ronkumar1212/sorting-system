@@ -9,11 +9,24 @@
 <body>
   <div class="container">
     <h1>Workbench Sorting System</h1>
-    <input type="text" id="search-bar" placeholder="Search for an item...">
-    <div id="categories">
-      <!-- Items will load here dynamically -->
+    
+    <!-- Dropdowns for filtering -->
+    <div class="filters">
+      <label for="category-dropdown">Category:</label>
+      <select id="category-dropdown">
+        <option value="">Loading...</option>
+      </select>
+
+      <label for="location-dropdown">Location:</label>
+      <select id="location-dropdown">
+        <option value="">Loading...</option>
+      </select>
     </div>
+
+    <!-- Add New Item Button -->
     <button id="add-item-btn">Add New Item</button>
+
+    <!-- Add New Item Form -->
     <div id="add-item-form" class="hidden">
       <h2>Add New Item</h2>
       <input type="text" id="item-name" placeholder="Item Name" required>
@@ -21,6 +34,11 @@
       <input type="text" id="item-location" placeholder="Location" required>
       <input type="text" id="item-notes" placeholder="Notes or Image URL">
       <button id="submit-item">Submit</button>
+    </div>
+
+    <!-- Results Section -->
+    <div id="results">
+      <!-- Filtered items will be displayed here -->
     </div>
   </div>
   <script src="script.js"></script>
