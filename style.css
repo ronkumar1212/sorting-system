@@ -2,10 +2,6 @@ body {
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
   background-color: #f4f4f4;
 }
 
@@ -23,9 +19,14 @@ h1 {
 }
 
 .filters {
+  position: sticky;
+  top: 0;
+  background: white;
+  padding: 10px 0;
   display: flex;
   justify-content: space-between;
-  margin-bottom: 20px;
+  z-index: 1;
+  border-bottom: 1px solid #ccc;
 }
 
 .filters label {
@@ -39,6 +40,7 @@ h1 {
 }
 
 #add-item-btn {
+  margin-top: 10px;
   background-color: #007bff;
   color: white;
   padding: 10px 20px;
@@ -61,6 +63,8 @@ h1 {
 
 #results {
   margin-top: 20px;
+  max-height: 300px;
+  overflow-y: auto;
 }
 
 .item {
