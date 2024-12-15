@@ -22,16 +22,20 @@ h1 {
   text-align: center;
 }
 
-#search-bar {
-  width: 100%;
-  padding: 10px;
+.filters {
+  display: flex;
+  justify-content: space-between;
   margin-bottom: 20px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
 }
 
-#categories {
-  margin-top: 20px;
+.filters label {
+  margin-right: 10px;
+}
+
+.filters select {
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
 
 #add-item-btn {
@@ -53,6 +57,10 @@ h1 {
 
 .hidden {
   display: none;
+}
+
+#results {
+  margin-top: 20px;
 }
 
 .item {
