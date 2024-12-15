@@ -1,4 +1,4 @@
-const API_URL = "https://script.google.com/macros/s/AKfycbxaQCyFV_NkjjS5JCWSqcI1c-zX3eKxaQJmAswyF2SQ7UbG7EyGGyd-ooQTy0KNbfxQ_w/exec"; // Replace with your Google Apps Script deployment URL
+const API_URL = "https://script.google.com/macros/s/AKfycbxM0rnav9BMJUy5rj1dk_1V-2_e-N4hfV5hyZIe3kZI-hzBX5BdALbLggwwoBJYfz0-0g/exec"; // Replace with your Google Apps Script deployment URL
 
 let itemsData = []; // To store all fetched items
 
