@@ -4,9 +4,14 @@ let itemsData = []; // To store all fetched items
 
 // Fetch items and initialize dropdowns
 async function fetchItems() {
-  const response = await fetch(API_URL);
-  itemsData = await response.json(); // Save fetched data
-  populateDropdowns(itemsData);
+  try {
+    const response = await fetch(API_URL);
+    itemsData = await response.json(); // Save fetched data
+    populateDropdowns(itemsData);
+    displayFilteredItems(); // Ensure filtered items are displayed after dropdowns load
+  } catch (error) {
+    console.error("Error fetching items:", error);
+  }
 }
 
 // Populate the dropdown menus for Category and Location
@@ -43,7 +48,7 @@ function displayFilteredItems() {
   const selectedLocation = document.getElementById("location-dropdown").value;
   const resultsDiv = document.getElementById("results");
 
-  // Filter items based on the dropdown selections
+  // Filter items based on dropdown selections
   const filteredItems = itemsData.filter((item) => {
     const matchCategory = selectedCategory ? item.category === selectedCategory : true;
     const matchLocation = selectedLocation ? item.location === selectedLocation : true;
@@ -68,9 +73,47 @@ function displayFilteredItems() {
   }
 }
 
-// Attach event listeners for dropdown changes
-document.getElementById("category-dropdown").addEventListener("change", displayFilteredItems);
-document.getElementById("location-dropdown").addEventListener("change", displayFilteredItems);
+// Show or hide the "Add New Item" form
+function toggleAddItemForm() {
+  const form = document.getElementById("add-item-form");
+  form.classList.toggle("hidden"); // Toggle visibility
+}
+
+// Submit the "Add New Item" form
+async function addItem() {
+  const name = document.getElementById("item-name").value.trim();
+  const category = document.getElementById("item-category").value.trim();
+  const location = document.getElementById("item-location").value.trim();
+  const notes = document.getElementById("item-notes").value.trim();
+
+  if (!name || !category || !location) {
+    alert("Please fill in all required fields (Name, Category, Location).");
+    return;
+  }
+
+  try {
+    // Submit the new item to Google Sheets backend
+    const response = await fetch(`${API_URL}?name=${name}&category=${category}&location=${location}&notes=${notes}`, {
+      method: "POST",
+    });
+
+    if (response.ok) {
+      alert("Item added successfully!");
+      fetchItems(); // Refresh the list
+      toggleAddItemForm(); // Hide the form
+    } else {
+      alert("Error adding item. Please try again.");
+    }
+  } catch (error) {
+    console.error("Error adding item:", error);
+  }
+}
+
+// Attach event listeners
+document.getElementById("category-dropdown").addEventListener("change", displayFilteredItems); // Filter items on category change
+document.getElementById("location-dropdown").addEventListener("change", displayFilteredItems); // Filter items on location change
+document.getElementById("add-item-btn").addEventListener("click", toggleAddItemForm); // Toggle "Add New Item" form
+document.getElementById("submit-item").addEventListener("click", addItem); // Submit new item
 
 // Load items on page load
 fetchItems();
