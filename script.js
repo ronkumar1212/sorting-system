@@ -1,4 +1,4 @@
-const API_URL = "https://script.google.com/macros/s/AKfycbxaQCyFV_NkjjS5JCWSqcI1c-zX3eKxaQJmAswyF2SQ7UbG7EyGGyd-ooQTy0KNbfxQ_w/exec"; // Replace with your Google Apps Script deployment URL
+const API_URL = "YOUR_GOOGLE_APPS_SCRIPT_URL"; // Replace with your Google Apps Script deployment URL
 
 let itemsData = []; // To store all fetched items
 
@@ -92,8 +92,16 @@ async function addItem() {
   }
 
   try {
-    // Submit the new item to Google Sheets backend
-    const response = await fetch(`${API_URL}?name=${name}&category=${category}&location=${location}&notes=${notes}`, {
+    // Create a query string for the data
+    const params = new URLSearchParams({
+      name: name,
+      category: category,
+      location: location,
+      notes: notes,
+    });
+
+    // Send data to the Google Apps Script backend
+    const response = await fetch(`${API_URL}?${params.toString()}`, {
       method: "POST",
     });
 
@@ -102,10 +110,12 @@ async function addItem() {
       fetchItems(); // Refresh the list
       toggleAddItemForm(); // Hide the form
     } else {
-      alert("Error adding item. Please try again.");
+      const errorText = await response.text();
+      alert(`Error adding item: ${errorText}`);
     }
   } catch (error) {
     console.error("Error adding item:", error);
+    alert("Error adding item. Please check the console for more details.");
   }
 }
 
