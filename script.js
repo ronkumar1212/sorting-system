@@ -1,20 +1,24 @@
-const API_URL = "https://script.google.com/macros/s/AKfycbxM0rnav9BMJUy5rj1dk_1V-2_e-N4hfV5hyZIe3kZI-hzBX5BdALbLggwwoBJYfz0-0g/exec"; // Replace with your Google Apps Script deployment URL
+const API_URL = "https://script.google.com/macros/s/AKfycbzZSWREF5zSSP8TX04MBDxXQE-cMwld5KyyFyhU0QwsS0lWAqj-mHBql4fMHwQu6FNHzw/exec"; // Replace with your Google Apps Script deployment URL
 
 let itemsData = []; // To store all fetched items
 
-// Fetch items and initialize dropdowns
+// Fetch items and populate dropdowns
 async function fetchItems() {
   try {
     const response = await fetch(API_URL);
-    itemsData = await response.json(); // Save fetched data
+    if (!response.ok) throw new Error("Failed to fetch data.");
+    itemsData = await response.json();
+
+    if (itemsData.error) throw new Error(itemsData.error);
+
     populateDropdowns(itemsData);
-    displayFilteredItems(); // Ensure filtered items are displayed after dropdowns load
   } catch (error) {
     console.error("Error fetching items:", error);
+    alert("Error fetching items. Please check the console for details.");
   }
 }
 
-// Populate the dropdown menus for Category and Location
+// Populate dropdown menus
 function populateDropdowns(items) {
   const categoryDropdown = document.getElementById("category-dropdown");
   const locationDropdown = document.getElementById("location-dropdown");
@@ -42,44 +46,34 @@ function populateDropdowns(items) {
   });
 }
 
-// Display items based on selected Category or Location
+// Display filtered items
 function displayFilteredItems() {
   const selectedCategory = document.getElementById("category-dropdown").value;
   const selectedLocation = document.getElementById("location-dropdown").value;
   const resultsDiv = document.getElementById("results");
 
-  // Filter items based on dropdown selections
+  // Filter items
   const filteredItems = itemsData.filter((item) => {
     const matchCategory = selectedCategory ? item.category === selectedCategory : true;
     const matchLocation = selectedLocation ? item.location === selectedLocation : true;
     return matchCategory && matchLocation;
   });
 
-  // Display filtered items
+  // Display items
   resultsDiv.innerHTML = ""; // Clear previous results
-  if (filteredItems.length > 0) {
-    filteredItems.forEach((item) => {
-      const itemDiv = document.createElement("div");
-      itemDiv.className = "item";
-      itemDiv.innerHTML = `
-        <strong>${item.name}</strong> (${item.category})
-        <br>Location: ${item.location}
-        <br>${item.notes ? `Notes: ${item.notes}` : ""}
-      `;
-      resultsDiv.appendChild(itemDiv);
-    });
-  } else {
-    resultsDiv.innerHTML = `<p>No items found.</p>`;
-  }
+  filteredItems.forEach((item) => {
+    const itemDiv = document.createElement("div");
+    itemDiv.className = "item";
+    itemDiv.innerHTML = `
+      <strong>${item.name}</strong> (${item.category})
+      <br>Location: ${item.location}
+      <br>${item.notes ? `Notes: ${item.notes}` : ""}
+    `;
+    resultsDiv.appendChild(itemDiv);
+  });
 }
 
-// Show or hide the "Add New Item" form
-function toggleAddItemForm() {
-  const form = document.getElementById("add-item-form");
-  form.classList.toggle("hidden"); // Toggle visibility
-}
-
-// Submit the "Add New Item" form
+// Submit a new item
 async function addItem() {
   const name = document.getElementById("item-name").value.trim();
   const category = document.getElementById("item-category").value.trim();
@@ -92,38 +86,29 @@ async function addItem() {
   }
 
   try {
-    // Create a query string for the data
-    const params = new URLSearchParams({
-      name: name,
-      category: category,
-      location: location,
-      notes: notes,
-    });
-
-    // Send data to the Google Apps Script backend
+    const params = new URLSearchParams({ name, category, location, notes });
     const response = await fetch(`${API_URL}?${params.toString()}`, {
       method: "POST",
     });
 
-    if (response.ok) {
-      alert("Item added successfully!");
-      fetchItems(); // Refresh the list
-      toggleAddItemForm(); // Hide the form
-    } else {
-      const errorText = await response.text();
-      alert(`Error adding item: ${errorText}`);
-    }
+    if (!response.ok) throw new Error("Failed to add item.");
+    const result = await response.text();
+    alert(result);
+
+    fetchItems(); // Refresh items
   } catch (error) {
     console.error("Error adding item:", error);
-    alert("Error adding item. Please check the console for more details.");
+    alert("Error adding item. Please check the console for details.");
   }
 }
 
 // Attach event listeners
-document.getElementById("category-dropdown").addEventListener("change", displayFilteredItems); // Filter items on category change
-document.getElementById("location-dropdown").addEventListener("change", displayFilteredItems); // Filter items on location change
-document.getElementById("add-item-btn").addEventListener("click", toggleAddItemForm); // Toggle "Add New Item" form
-document.getElementById("submit-item").addEventListener("click", addItem); // Submit new item
+document.getElementById("category-dropdown").addEventListener("change", displayFilteredItems);
+document.getElementById("location-dropdown").addEventListener("change", displayFilteredItems);
+document.getElementById("add-item-btn").addEventListener("click", () => {
+  document.getElementById("add-item-form").classList.toggle("hidden");
+});
+document.getElementById("submit-item").addEventListener("click", addItem);
 
 // Load items on page load
 fetchItems();
